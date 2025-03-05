@@ -1,48 +1,46 @@
-
-open class Task(var title:String, var description: String, var status: TaskStatus, val priority: Priority): Loggable{
-    override fun log(message: String){
-        println(message = "задача $title, описание $description, приоритет $priority, статус ")
-        TaskMan(status)
-    }
-}
-class UrgentTask(var deadline: String, title: String,description: String,status: TaskStatus,priority: Priority):Task(title,description,status,priority) {}
-
-interface Loggable {
-    fun log(message:String)
-}
-object TaskManager{
-    fun addTask(task: Task, listTasks: MutableList<Task>){
-        listTasks.add(task);
-    }
-    fun listTask(listTasks: MutableList<Task>){
-        listTasks.forEach{
-            println(it.log(""))
-        }
-    }
-}
-
-sealed class TaskStatus()
-data class Compiled(val success:String):TaskStatus()
-data class Error(val error:String):TaskStatus()
-fun TaskMan(taskStatus:TaskStatus){
-    when (taskStatus){
-        is Compiled -> println(message = "успешно")
-        is Error -> println(message = "ошибка")
-        }
-    }
-enum class Priority(){
-    LOW,
-    MEDIUM,
-    HIGH
-}
-
+//дз4
 fun main() {
-    val tasks = mutableListOf<Task>()
-    val task1 = Task("задача1", "сделана нормально", Error("") , Priority.LOW)
-    val task2 = Task("задача2","капец не понимаю ничего", Compiled(""), Priority.MEDIUM)
-    val task3 = UrgentTask("завтра блин, опаздываем, Олег","задача не знаю какая","моё дз",Compiled(""), Priority.HIGH)
-    TaskManager.addTask(task1,tasks)
-    TaskManager.addTask(task2,tasks)
-    TaskManager.addTask(task3,tasks)
-    TaskManager.listTask(tasks)
+    println("введите операцию из списка, которую вы хотите выполнить : 'сложить', 'умножить', 'разделить', 'вычесть'")
+    val operation = readlnOrNull()
+    println("введите два числа через enter")
+    when (operation) {
+        "сложить" ->
+            calculator(a = readln().toInt(), b = readln().toInt()) { a, b -> a + b }
+
+        "умножить" ->
+            calculator(a = readln().toInt(), b = readln().toInt()) { a, b -> a * b }
+
+        "разделить" ->
+            calculator(a = readln().toInt(), b = readln().toInt()) { a, b -> a / b }
+
+        "вычесть" ->
+            calculator(a = readln().toInt(), b = readln().toInt()) { a, b -> a - b }
+    }
+    println("введите слово которое хотите проверить (палиндром или нет)")
+    palindrom(option = readLine().toString())  {it == it.reversed()}
+    println("введите число факториал которого хотите посчитать")
+    val result = factorial(number = readln().toInt()) {it}
+    println("факториал вашего числа равен: $result")
+}
+//задача1
+fun calculator(a:Int, b:Int, calculate:(Int, Int) -> Int){
+    val result = calculate(a, b)
+    println(result)
+}
+//задача2
+fun palindrom (option:String, check:(String) -> Boolean){
+    when(check(option)){
+        true -> println("$option является палиндромом")
+        false -> println("$option не является палиндромом")
+    }
+}
+//Задание 3: Обработка числовых последовательностей
+//Напиши программу, которая использует лямбда-выражения для обработки числовых последовательностей
+//Создай лямбда-выражение для вычисления факториала числа
+//Запроси у пользователя число и используй лямбду для вычисления его факториала и также выведи результат
+//задача3
+fun factorial(number: Int, factor: (Int) -> Int): Int{
+    var result = 1
+    for (i in 1..number) {result *= factor(i)}
+    return result
 }
