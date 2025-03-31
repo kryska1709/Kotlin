@@ -1,46 +1,70 @@
-//дз4
+
+//1. Создай список чисел. Используй лямбда-выражение для фильтрации всех четных чисел(готово)
+//2. Создай список строк. Отсортируй его по длине строк с использованием лямбда-выражения(готово)
+//3. Создай список чисел. Преобразуй каждое число в его квадрат с использованием лямбда-выражения(готово)
+//4. Создай список объектов с полями name и age. Используйте лямбда-выражение для нахождения(готово)
+// среднего возраста
+//5. Создай список строк. Используй лямбда-выражение для поиска первой строки,
+// которая начинается с заданной буквы(готово)
 fun main() {
-    println("введите операцию из списка, которую вы хотите выполнить : 'сложить', 'умножить', 'разделить', 'вычесть'")
-    val operation = readlnOrNull()
-    println("введите два числа через enter")
-    when (operation) {
-        "сложить" ->
-            calculator(a = readln().toInt(), b = readln().toInt()) { a, b -> a + b }
-
-        "умножить" ->
-            calculator(a = readln().toInt(), b = readln().toInt()) { a, b -> a * b }
-
-        "разделить" ->
-            calculator(a = readln().toInt(), b = readln().toInt()) { a, b -> a / b }
-
-        "вычесть" ->
-            calculator(a = readln().toInt(), b = readln().toInt()) { a, b -> a - b }
+    val numbers = listOf(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20)
+    val filtr = {list:List<Int> ->
+        for(i in 0 until list.size){
+            if(list[i]%2==0){
+                print("${list[i]} ")
+            }
+        }
     }
-    println("введите слово которое хотите проверить (палиндром или нет)")
-    palindrom(option = readLine().toString())  {it == it.reversed()}
-    println("введите число факториал которого хотите посчитать")
-    val result = factorial(number = readln().toInt()) {it}
-    println("факториал вашего числа равен: $result")
-}
-//задача1
-fun calculator(a:Int, b:Int, calculate:(Int, Int) -> Int){
-    val result = calculate(a, b)
-    println(result)
-}
-//задача2
-fun palindrom (option:String, check:(String) -> Boolean){
-    when(check(option)){
-        true -> println("$option является палиндромом")
-        false -> println("$option не является палиндромом")
+    filtr(numbers)
+    println()
+
+    val strings = mutableListOf("list","ghost","insidious","trost","attack","titan")
+    val filterStringss = {list:List<String> ->
+        list.sortedBy {
+            it.length
+        }
     }
+    println(filterStringss(strings))
+    val numbers2 = listOf(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20)
+    val squares = {list:List<Int> ->
+        for (i in 0 until list.size){
+            print("${list[i]*list[i]} ")
+        }
+    }
+    squares(numbers2)
+    println()
+
+    val persons = listOf(
+        Person("nataniel",19),
+        Person("andrew",20),
+        Person("jean",21),
+        Person("kevin",21),
+        Person("aragorn",83),
+        Person("legolas",2987)
+    )
+    val ages = {list:List<Person> ->
+        var sum = 0
+        for(i in 0 until list.size){
+            sum += list[i].age
+        }
+        println(sum/list.size)
+    }
+    ages(persons)
+
+    val firstcharr = "t"
+    val strings2 = mutableListOf("ghost","insidious","trost","attack","titan")
+    val firstChar = {list:List<String> ->
+        for (i in 0 until list.size){
+            if(list[i].startsWith(firstcharr)){
+                println(list[i])
+                break
+            }
+        }
+    }
+    firstChar(strings2)
 }
-//Задание 3: Обработка числовых последовательностей
-//Напиши программу, которая использует лямбда-выражения для обработки числовых последовательностей
-//Создай лямбда-выражение для вычисления факториала числа
-//Запроси у пользователя число и используй лямбду для вычисления его факториала и также выведи результат
-//задача3
-fun factorial(number: Int, factor: (Int) -> Int): Int{
-    var result = 1
-    for (i in 1..number) {result *= factor(i)}
-    return result
-}
+
+data class Person(
+    val name:String,
+    val age:Int
+)
